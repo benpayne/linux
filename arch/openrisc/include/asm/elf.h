@@ -21,6 +21,7 @@
 
 #include <linux/types.h>
 #include <uapi/asm/elf.h>
+#include <uapi/asm/auxvec.h>
 
 /*
  * This is used to ensure we don't load something for the wrong architecture.
@@ -61,5 +62,29 @@ extern void dump_elf_thread(elf_greg_t *dest, struct pt_regs *pt);
    but that could change... */
 
 #define ELF_PLATFORM	(NULL)
+
+#define ARCH_HAS_SETUP_ADDITIONAL_PAGES
+
+extern unsigned int vdso_enabled;
+
+struct linux_binprm;
+extern int arch_setup_additional_pages(struct linux_binprm *bprm,
+                                       int uses_interp);
+
+#define VDSO_BASE		((unsigned long)current->mm->context.vdso)
+#define VDSO_SYM(x)		(VDSO_BASE + (unsigned long)(x))
+
+#define VSYSCALL_AUX_ENT					\
+	if (vdso_enabled)					\
+		NEW_AUX_ENT(AT_SYSINFO_EHDR, VDSO_BASE);	\
+	else							\
+		NEW_AUX_ENT(AT_IGNORE, 0)
+
+/* update AT_VECTOR_SIZE_ARCH if the number of NEW_AUX_ENT entries changes */
+#define ARCH_DLINFO						\
+do {								\
+	/* Optional vsyscall entry */				\
+	VSYSCALL_AUX_ENT;					\
+} while (0)
 
 #endif

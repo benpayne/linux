@@ -93,6 +93,8 @@ extern inline void exit_thread(void)
 	/* Nothing needs to be done.  */
 }
 
+int vdso_init(void);
+
 /*
  * Return saved PC of a blocked thread. For now, this is the "user" PC
  */

@@ -167,7 +167,7 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
 
 int init_new_context(struct task_struct *tsk, struct mm_struct *mm)
 {
-	mm->context = NO_CONTEXT;
+	mm->context.vdso = NULL;
 	return 0;
 }
 

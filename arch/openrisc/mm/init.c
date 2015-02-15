@@ -215,6 +215,8 @@ void __init mem_init(void)
 	/* this will put all low memory onto the freelists */
 	free_all_bootmem();
 
+	vdso_init();
+	
 	mem_init_print_info(NULL);
 
 	printk("mem_init_done ...........................................\n");
