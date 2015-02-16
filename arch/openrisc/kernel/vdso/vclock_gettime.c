@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2015 Ben Payne <bpayne@jetheaddev.com>
+ *
+ * Based on x86 versions of this code. 
+ */
 #include <asm/linkage.h>
 #include <linux/time.h>
 #include <asm/vgtod.h>

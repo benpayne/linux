@@ -8,7 +8,7 @@
  * vDSO randomization
  * Copyright(C) 2005-2006, Red Hat, Inc., Ingo Molnar
  *
- * Copyrifht(C) 2015 Ben Payne
+ * Copyright(C) 2015 Ben Payne
  *
  * This file is subject to the terms and conditions of the GNU General Public
  * License.  See the file "COPYING" in the main directory of this archive

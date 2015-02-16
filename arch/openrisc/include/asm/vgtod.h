@@ -1,5 +1,10 @@
-#ifndef _ASM_X86_VGTOD_H
-#define _ASM_X86_VGTOD_H
+/*
+ * Copyright (C) 2015 Ben Payne <bpayne@jetheaddev.com>
+ *
+ * Based on x86 versions of this code. 
+ */
+#ifndef _ASM_OPENRISC_VGTOD_H
+#define _ASM_OPENRISC_VGTOD_H
 
 #include <linux/compiler.h>
 #include <linux/clocksource.h>

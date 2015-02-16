@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Ben Payne <bpayne@jetheaddev.com>
  *
- * Based on tructure used in x86 arch
+ * Based on structure used in x86 arch
  */
 #include <linux/timekeeper_internal.h>
 #include <asm/vgtod.h>

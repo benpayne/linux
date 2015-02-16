@@ -1,4 +1,7 @@
 /*
+ * Copyright (C) 2015 Ben Payne <bpayne@jetheaddev.com>
+ */
+/*
  * Linker script for vsyscall DSO.  The vsyscall page is an ELF shared
  * object prelinked to its virtual address, and with only one read-only
  * segment (that fits in one page).  This script controls its layout.
