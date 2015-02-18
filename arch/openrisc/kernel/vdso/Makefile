@@ -17,7 +17,7 @@ export CPPFLAGS_vdso.lds += -P -C -Ush
 vdso-flags = -shared -s -Wl,-soname=linux-vdso.so.1 \
 		$(call cc-ldoption, -Wl$(comma)--hash-style=sysv)
 
-CFLAGS_vnumber_of_the_beast.o = -fPIC
+CFLAGS_vclock_gettime.o = -fPIC
 SYSCFLAGS_vdso.so = $(vdso-flags)
 
 $(obj)/vdso.so: $(src)/vdso.lds $(foreach F, $(vobjs-y), $(obj)/$F) FORCE

@@ -25,6 +25,7 @@
 #include <linux/binfmts.h>
 
 //#define DUMMY_VDSO
+//#define VDSO_DEBUG
 
 /*
  * Should the kernel map a VDSO page into processes and pass its
@@ -54,13 +55,15 @@ unsigned long vdso_size = 0;
 
 int __init vdso_init(void)
 {
+#ifdef VDSO_DEBUG
 	printk( "vdso_start 0x%lx-0x%lx, size %d\n", (unsigned long)&vdso_start, (unsigned long)&vdso_end, &vdso_end - &vdso_start );
+	printk( "vvar start 0x%lx\n", (unsigned long)&__vvar_page );
+#endif
 	vdso_pages[0] = virt_to_page(&vdso_start);
 	vvar_pages[0] = virt_to_page(&__vvar_page);
 	get_page(vdso_pages[0]);
 	get_page(vvar_pages[0]);
 	vdso_size = &vdso_end - &vdso_start;
-	printk( "vvar start 0x%lx\n", (unsigned long)&__vvar_page );
 	return 0;
 }
 
@@ -71,9 +74,11 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
 	unsigned long addr;
 	int ret = 0;
 
+	if (!vdso_enabled)
+		return 0;
+	
 	current->mm->context.vdso = 0;
 
-	printk( "Arch Setup\n" );
 	down_write(&mm->mmap_sem);
 	addr = get_unmapped_area(NULL, 0, PAGE_SIZE+vdso_size, 0, 0);
 	if (IS_ERR_VALUE(addr)) {
@@ -100,7 +105,9 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
 	}
 	
 	current->mm->context.vdso = (void *)addr+PAGE_SIZE;
-	printk("setup vDSO page at %p size %ld\n", (void*)addr, vdso_size);
+#ifdef VDSO_DEBUG
+	printk("setup vDSO page at %p size %ld stack at 0x%lx\n", (void*)addr, vdso_size, PAGE_ALIGN(current->mm->start_stack));
+#endif
 up_fail:
 	up_write(&mm->mmap_sem);
 	return ret;
@@ -110,6 +117,8 @@ const char *arch_vma_name(struct vm_area_struct *vma)
 {
 	if (vma->vm_mm && vma->vm_start == (long)vma->vm_mm->context.vdso)
 		return "[vdso]";
-
+	else if (vma->vm_mm && vma->vm_start == (long)vma->vm_mm->context.vdso-PAGE_SIZE)
+		return "[vvar]";
+	
 	return NULL;
 }
